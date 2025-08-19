@@ -9,9 +9,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Copy, RefreshCw, Github, Home as HomeIcon, Mail, BookOpen, Save, History, ChevronDown, ChevronUp, Globe, Clock } from "lucide-react";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { toast } from "sonner";
-import { format as dateFnsFormat, getWeek, getISOWeek, getQuarter } from "date-fns";
+import { getWeek, getISOWeek, getQuarter } from "date-fns";
 import { enUS, fr, es, de, ja, zhCN, ar } from "date-fns/locale";
-import { formatInTimeZone, toZonedTime, fromZonedTime } from "date-fns-tz";
+import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 
 // Locale configurations
 const locales = {
@@ -70,11 +70,13 @@ function getRelativeTime(date: Date, now: Date): string {
   return 'just now';
 }
 
-function formatTimestampFrom(format: string, date: Date, locale = 'en-US', timezone = 'UTC'): string {
+function formatTimestampFrom(format: string, date: Date, _locale = 'en-US', timezone = 'UTC'): string {
   try {
+  // mark unused param as intentionally unused
+  void _locale;
     // Convert date to specified timezone
     const zonedDate = timezone === 'UTC' ? date : toZonedTime(date, timezone);
-    const localeConfig = locales[locale as keyof typeof locales] || locales['en-US'];
+  // const localeConfig = locales[locale as keyof typeof locales] || locales['en-US'];
     
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const daysAbb = ["Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat."];
@@ -305,8 +307,19 @@ export default function Home() {
   const [showTokenReference, setShowTokenReference] = useState(false);
   const [selectedLocale, setSelectedLocale] = useState<string>('en-US');
   const [selectedTimezone, setSelectedTimezone] = useState<string>('UTC');
-  const [additionalTimezones, setAdditionalTimezones] = useState<string[]>([]);
   const [showMultipleTimezones, setShowMultipleTimezones] = useState(false);
+
+  // Check if running in Tauri
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDesktop = window.__TAURI__ !== undefined;
+      
+      // If in Tauri, redirect to tray interface
+      if (isDesktop && window.location.pathname === '/') {
+        window.location.href = '/tray/';
+      }
+    }
+  }, []);
 
   // Memoize to avoid recalculation on small state updates
   const formatted = useMemo(() => formatTimestampFrom(format, now, selectedLocale, selectedTimezone), [format, now, selectedLocale, selectedTimezone]);

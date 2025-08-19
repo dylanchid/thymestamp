@@ -18,9 +18,27 @@ export default function DocsPage() {
               Thymestamp helps you generate friendly, readable timestamps for journals, notes, and emails.
               Use the Custom Format input to craft your ideal string using tokens.
             </p>
-            <ul className="list-disc pl-5">
+            <ul className="list-disc pl-5 space-y-1">
               <li>
-                Available tokens: {"{day}"}, {"{day-abb}"}, {"{month}"}, {"{month-abb}"}, {"{date}"}, {"{time}"}, {"{period}"}, {"{year}"}
+                Basic: {"{day}"}, {"{day-abb}"}, {"{month}"}, {"{month-abb}"}, {"{date}"}, {"{year}"}, {"{year-short}"}
+              </li>
+              <li>
+                Numeric: {"{month-num}"}, {"{month-num-pad}"}
+              </li>
+              <li>
+                Time (12h): {"{time}"}, {"{hours}"}, {"{minutes}"}, {"{seconds}"}, {"{period}"}
+              </li>
+              <li>
+                Time (24h): {"{time24}"}, {"{hours24}"}, {"{minutes}"}, {"{seconds}"}, {"{milliseconds}"}
+              </li>
+              <li>
+                Calendar: {"{week}"}, {"{iso-week}"}, {"{quarter}"}, {"{season}"}
+              </li>
+              <li>
+                Timezone: {"{timezone}"}, {"{utc-offset}"}, {"{timezone-full}"}
+              </li>
+              <li>
+                Relative: {"{relative}"}
               </li>
               <li>The preview updates live. Click Copy to copy the formatted string.</li>
               <li>Refresh updates the time to the current minute.</li>
